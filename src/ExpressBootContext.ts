@@ -55,12 +55,12 @@ export default class ExpressBootContext {
      * Inject dependency into method with method's name as node name.
      * @returns New method which will return dependency on call
      */
-    public static inject(): MethodDecorator {
+    public static inject(name?: string): MethodDecorator {
         const evaluation: MethodDecorator = function (target, propertyKey, descriptor) {
             return <any> {
                 ...descriptor,
                 value: function () {
-                    return ExpressBootContext.nodes[propertyKey]
+                    return ExpressBootContext.nodes[name || propertyKey];
                 }
             }
         }
