@@ -1,3 +1,6 @@
+/**
+ * ExpressBoot app's context and node container support for dependency injection.
+ */
 @ExpressBootContext.node("context")
 export default class ExpressBootContext {
     // STATIC
