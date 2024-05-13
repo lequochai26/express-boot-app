@@ -179,20 +179,37 @@ export default class ExpressBootContext {
     }
 
     // Methods:
+    /**
+     * Get a specific node with given name
+     * @param name Node name
+     * @returns Node
+     */
     public getNode(name: string): any {
         return ExpressBootContext.nodes[name];
     }
 
+    /**
+     * Get all nodes available in system
+     * @returns List of all nodes in system
+     */
     public getNodes(): any[] {
         return Object.values(
             ExpressBootContext.nodes
         );
     }
 
+    /**
+     * Get all request handlers in system
+     * @returns List of all request handlers
+     */
     public getRequestHandlers() {
         return ExpressBootContext.requestHandlers;
     }
 
+    /**
+     * Get all request middlewares in system
+     * @returns List of all request middlewares
+     */
     public getRequestMiddlewares() {
         return ExpressBootContext.requestMiddlewares;
     }
