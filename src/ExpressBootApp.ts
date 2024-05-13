@@ -2,6 +2,7 @@ import { config } from "dotenv";
 import ExpressBootContext from "./ExpressBootContext";
 import express, { Express } from 'express';
 import http from 'http';
+import multer from "multer";
 
 // App config
 config();
@@ -37,6 +38,19 @@ export class ExpressBootApp {
         for (const script of scripts) {
             script();
         }
+    }
+
+    private async appConfigure(app: Express): Promise<void> {
+        // JSON body parser
+        app.use(express.json());
+
+        // Multer
+        app.use(
+            multer({ storage: multer.memoryStorage() }).any()
+        );
+
+        // CORS
+        // Todo
     }
 
     private async applyRequestMiddlewares(app: Express, context: ExpressBootContext): Promise<void> {
@@ -119,6 +133,9 @@ export class ExpressBootApp {
                 port,
                 () => console.log(`${appName} started on port ${port}`)
             );
+
+            // Congiure app
+            await this.appConfigure(app);
 
             // Applying middlewares
             await this.applyRequestMiddlewares(app, context);
