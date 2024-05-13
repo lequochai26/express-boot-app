@@ -26,7 +26,7 @@ export default class ExpressBootContext {
     public static configNode(...dependencies: string[]): MethodDecorator {
         const evaluation: MethodDecorator = function (target, propertyKey, descriptor: any) {
             ExpressBootContext.nodes[propertyKey] = descriptor.value.call(
-                descriptor.value,
+                target,
                 ...dependencies.map(
                     dependency => ExpressBootContext.nodes[dependency]
                 )
