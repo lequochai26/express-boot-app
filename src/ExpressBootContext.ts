@@ -12,8 +12,16 @@ export default class ExpressBootContext {
      * Define a node through class with node name as given
      * @param name - node name
      */
-    public static node(name: string, ...args: any[]): ClassDecorator {
+    public static node(name?: string, ...args: any[]): ClassDecorator {
         const evaluation: ClassDecorator = function (target: any) {
+            if (!name) {
+                name = target.name;
+                name = name.replace(
+                    name.charAt(0),
+                    name.charAt(0).toLowerCase()
+                );
+            }
+
             ExpressBootContext.nodes[name] = new target(...args);
         };
         return evaluation;
