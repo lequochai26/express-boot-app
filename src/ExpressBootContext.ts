@@ -24,6 +24,11 @@ export default class ExpressBootContext {
      */
     private static requestMiddlewares: [ string, RequestHandler ][];
 
+    /**
+     * Executable scripts storage
+     */
+    private static scripts: (() => void)[] = [];
+
     // Decorators:
     /**
      * Define a node through class with node name as given
@@ -173,6 +178,21 @@ export default class ExpressBootContext {
         return ExpressBootContext.requestHandle(path);
     }
 
+    /**
+     * Marks a method as an executable script and will be execute when context successfully loaded.
+     */
+    public static script(...dependencies: (string | symbol)[]): MethodDecorator {
+        const evaluation: MethodDecorator = function (target, propertyKey, descriptor: any) {
+            descriptor.value.call(
+                target,
+                ...dependencies.map(
+                    dependency => ExpressBootContext.nodes[dependency]
+                )
+            );
+        };
+        return evaluation;
+    }
+
     // INSTANCE
     // Constructors:
     public constructor() {
@@ -215,6 +235,13 @@ export default class ExpressBootContext {
         return ExpressBootContext.requestMiddlewares;
     }
 
+    /**
+     * Get all scripts in system
+     * @returns List of all scripts
+     */
+    public getScripts() {
+        return ExpressBootContext.scripts;
+    }
 
     /**
      * Load context from a specific path
