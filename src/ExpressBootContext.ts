@@ -1,5 +1,6 @@
 import { RequestHandler } from "express";
 import ExpressBootHTTPMethod from "./ExpressBootHTTPMethod";
+import fs from 'fs';
 
 /**
  * ExpressBoot app's context and node container support for dependency injection.
@@ -212,5 +213,25 @@ export default class ExpressBootContext {
      */
     public getRequestMiddlewares() {
         return ExpressBootContext.requestMiddlewares;
+    }
+
+
+    /**
+     * Load context from a specific path
+     * @param path Root directory source directory
+     */
+    public async load(path: string): Promise<void> {
+        const dirs: string[] = fs.readdirSync(
+            path,
+            { encoding: null, recursive: true }
+        );
+
+        for (const dir of dirs) {
+            if (!dir.endsWith(".ts")) {
+                continue;
+            }
+
+            await import(`${path}${!path.endsWith("/") ? "/": ""}${dir}`);
+        }
     }
 }
