@@ -22,7 +22,7 @@ export default class ExpressBootContext {
     /**
      * HTTP request middlewares storage
      */
-    private static requestMiddlewares: [ string, RequestHandler ][];
+    private static requestMiddlewares: [ string, RequestHandler ][] = [];
 
     /**
      * Executable scripts storage
