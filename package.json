@@ -2,9 +2,11 @@
   "name": "express-boot",
   "version": "1.0.0",
   "description": "Back-end framework build on top of Express.js",
-  "main": "index.js",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
-    "start": "ts-node ./src/index.ts"
+    "start": "ts-node ./src/index.ts",
+    "build": "tsc"
   },
   "keywords": [
     "express-boot"
