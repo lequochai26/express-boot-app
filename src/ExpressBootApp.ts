@@ -54,7 +54,12 @@ export default class ExpressBootApp {
         app.use(express.json());
 
         // Multer
+        const multerConfigurer = context.getMulterConfigurer();
         app.use(
+            multerConfigurer
+            ?
+            multerConfigurer.configurer.call(multerConfigurer.target)
+            :
             multer({ storage: multer.memoryStorage() }).any()
         );
     }
