@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 import ExpressBootHTTPMethod from "./ExpressBootHTTPMethod";
 import fs from 'fs';
+import ExpressBootCorsHandler from "./ExpressBootCorsHandler";
 
 /**
  * ExpressBoot app's context and node container support for dependency injection.
@@ -28,6 +29,11 @@ export default class ExpressBootContext {
      * Executable scripts storage
      */
     private static scripts: (() => void)[] = [];
+
+    /**
+     * CORS handler
+     */
+    private static corsHandler: { target: Object, handler: ExpressBootCorsHandler } | undefined = undefined;
 
     // Decorators:
     /**
@@ -179,6 +185,20 @@ export default class ExpressBootContext {
     }
 
     /**
+     * Mark a method as a CORS handler
+     */
+    public static cors<T extends ExpressBootCorsHandler>() {
+        function evaluation (
+            target: Object,
+            propertyKey: string | symbol,
+            descriptor: TypedPropertyDescriptor<T>
+        ): void | TypedPropertyDescriptor<T> {
+            ExpressBootContext.corsHandler = { target, handler: descriptor.value };
+        };
+        return evaluation;
+    }
+
+    /**
      * Marks a method as an executable script and will be execute when context successfully loaded.
      */
     public static script(...dependencies: (string | symbol)[]): MethodDecorator {
@@ -241,6 +261,14 @@ export default class ExpressBootContext {
      */
     public getScripts() {
         return ExpressBootContext.scripts;
+    }
+
+    /**
+     * Get CORS handler for this project
+     * @returns CORS handler
+     */
+    public getCorsHandler() {
+        return ExpressBootContext.corsHandler;
     }
 
     /**

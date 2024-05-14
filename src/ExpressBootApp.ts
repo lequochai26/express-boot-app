@@ -3,6 +3,7 @@ import ExpressBootContext from "./ExpressBootContext";
 import express, { Express } from 'express';
 import http from 'http';
 import multer from "multer";
+import cors from 'cors';
 
 // App config
 config();
@@ -41,6 +42,12 @@ export default class ExpressBootApp {
     }
 
     private async appConfigure(app: Express): Promise<void> {
+        // CORS
+        const corsHandler = this.context().getCorsHandler();
+        app.use(
+            cors(corsHandler && corsHandler.handler.call(corsHandler.target))
+        );
+
         // JSON body parser
         app.use(express.json());
 
@@ -48,9 +55,6 @@ export default class ExpressBootApp {
         app.use(
             multer({ storage: multer.memoryStorage() }).any()
         );
-
-        // CORS
-        // Todo
     }
 
     private async applyRequestMiddlewares(app: Express, context: ExpressBootContext): Promise<void> {
