@@ -12,7 +12,7 @@ const appName: string = process.env.APP_NAME || "ExpressBoot App";
 const staticResourcesPath: string = process.env.STATIC_RESOURCES_PATH || "./assets";
 
 @ExpressBootContext.node("app")
-export class ExpressBootApp {
+export default class ExpressBootApp {
     // Static dependencies:
     @ExpressBootContext.inject("app")
     public static getInstance(): ExpressBootApp {
