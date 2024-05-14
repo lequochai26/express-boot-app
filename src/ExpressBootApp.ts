@@ -20,6 +20,10 @@ export default class ExpressBootApp {
         return null;
     }
 
+    // Fields:
+    private expressApp: Express;
+    private server: http.Server;
+
     // Dependencies:
     @ExpressBootContext.inject()
     private context(): ExpressBootContext {
@@ -108,15 +112,22 @@ export default class ExpressBootApp {
     }
 
     // Methods:
+    public async started(): Promise<boolean> {
+        return this.server !== undefined;
+    }
+
+    public async stop(): Promise<void> {
+        this.server.close();
+
+        delete this.server;
+        delete this.expressApp;
+    }
+
     public async start(): Promise<{ app: Express, server: http.Server }> {
         // Source root undefined case
         if (!sourceRoot) {
             throw new Error("Please, specify SOURCE_ROOT before performing this action!");
         }
-
-        // App declaration
-        let app: Express;
-        let server: http.Server;
 
         try {
             // Load context
@@ -132,33 +143,44 @@ export default class ExpressBootApp {
             await this.executeScripts(context);
 
             // Start app
-            app = express();
-            server = app.listen(
+            this.expressApp = express();
+            this.server = this.expressApp.listen(
                 port,
                 () => console.log(`${appName} started on port ${port}`)
             );
 
             // Congiure app
-            await this.appConfigure(app);
+            await this.appConfigure(this.expressApp);
 
             // Applying middlewares
-            await this.applyRequestMiddlewares(app, context);
+            await this.applyRequestMiddlewares(this.expressApp, context);
 
             // Applying request handlers
-            await this.applyRequestHandlers(app, context);
+            await this.applyRequestHandlers(this.expressApp, context);
 
             // Serving static resources
-            await this.staticResourcesServe(app, staticResourcesPath);
+            await this.staticResourcesServe(this.expressApp, staticResourcesPath);
 
-            // Return
-            return { app, server };
+            // Return app and server
+            return {
+                app: this.expressApp,
+                server: this.server
+            };
         }
         catch (error: any) {
-            if (server) {
-                server.close();
+            if (await this.started()) {
+                await this.stop();
             }
             throw error;
         }
+    }
+
+    public getExpressApp(): Express {
+        return this.expressApp;
+    }
+
+    public getServer(): http.Server {
+        return this.server;
     }
 
 }
