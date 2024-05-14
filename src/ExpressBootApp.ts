@@ -43,9 +43,9 @@ export default class ExpressBootApp {
         }
     }
 
-    private async appConfigure(app: Express): Promise<void> {
+    private async appConfigure(app: Express, context: ExpressBootContext): Promise<void> {
         // CORS
-        const corsHandler = this.context().getCorsHandler();
+        const corsHandler = context.getCorsHandler();
         app.use(
             cors(corsHandler && corsHandler.handler.call(corsHandler.target))
         );
@@ -152,7 +152,7 @@ export default class ExpressBootApp {
             );
 
             // Congiure app
-            await this.appConfigure(this.expressApp);
+            await this.appConfigure(this.expressApp, context);
 
             // Applying middlewares
             await this.applyRequestMiddlewares(this.expressApp, context);
