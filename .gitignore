@@ -5,3 +5,5 @@
 .env
 
 /assets
+
+tsconfig.tsbuildinfo
