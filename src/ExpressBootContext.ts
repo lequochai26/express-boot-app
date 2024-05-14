@@ -2,6 +2,7 @@ import { RequestHandler } from "express";
 import ExpressBootHTTPMethod from "./ExpressBootHTTPMethod";
 import fs from 'fs';
 import ExpressBootCorsHandler from "./ExpressBootCorsHandler";
+import ExpressBootRequestHandlerProvider from "./ExpressBootRequestHandlerProvider";
 
 /**
  * ExpressBoot app's context and node container support for dependency injection.
@@ -34,6 +35,11 @@ export default class ExpressBootContext {
      * CORS handler
      */
     private static corsHandler: { target: Object, handler: ExpressBootCorsHandler } | undefined = undefined;
+
+    /**
+     * Multer configurer
+     */
+    private static multerConfigurer: { target: Object, configurer: ExpressBootRequestHandlerProvider } | undefined = undefined;
 
     // Decorators:
     /**
@@ -199,6 +205,20 @@ export default class ExpressBootContext {
     }
 
     /**
+     * Mark a method as a multer configurer
+     */
+    public static multer<T extends ExpressBootRequestHandlerProvider>() {
+        function evaluation(
+            target: Object,
+            propertyKey: string | symbol,
+            descriptor: TypedPropertyDescriptor<T>
+        ): void | TypedPropertyDescriptor<T> {
+            ExpressBootContext.multerConfigurer = { target, configurer: descriptor.value };
+        }
+        return evaluation;
+    }
+
+    /**
      * Marks a method as an executable script and will be execute when context successfully loaded.
      */
     public static script(...dependencies: (string | symbol)[]): MethodDecorator {
@@ -269,6 +289,14 @@ export default class ExpressBootContext {
      */
     public getCorsHandler() {
         return ExpressBootContext.corsHandler;
+    }
+
+    /**
+     * Get multer configurer for this project
+     * @returns Multer configurer
+     */
+    public getMulterConfigurer() {
+        return ExpressBootContext.multerConfigurer;
     }
 
     /**
