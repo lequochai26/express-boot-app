@@ -31,10 +31,8 @@ export default class ExpressBootApp {
     }
 
     // Private methods:
-    private async loadContext(sourceRoot: string): Promise<ExpressBootContext> {
-        const context = this.context();
+    private async loadContext(context: ExpressBootContext, sourceRoot: string): Promise<void> {
         await context.load(sourceRoot);
-        return context;
     }
 
     private async executeScripts(context: ExpressBootContext): Promise<void> {
@@ -130,8 +128,12 @@ export default class ExpressBootApp {
         }
 
         try {
+            // Get context
+            const context: ExpressBootContext = this.context();
+
             // Load context
-            const context: ExpressBootContext = await this.loadContext(
+            await this.loadContext(
+                context,
                 sourceRoot.startsWith("./")
                 ?
                 sourceRoot.replace("./", `${process.cwd()}/`)
