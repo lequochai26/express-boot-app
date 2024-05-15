@@ -1,5 +1,5 @@
 import { config } from "dotenv";
-import ExpressBootContext from "./ExpressBootContext";
+import ExpressBootContext from "../ExpressBootContext";
 import express, { Express } from 'express';
 import http from 'http';
 import multer from "multer";
