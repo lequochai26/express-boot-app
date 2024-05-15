@@ -223,6 +223,12 @@ export default class ExpressBootContext implements Context {
         return ExpressBootContext.requestHandlers;
     }
 
+    public getRequestHandler(path: string, method: ExpressBootHTTPMethod): ExpressBootRequestHandler {
+        return ExpressBootContext.requestHandlers.filter(
+            handler => (handler.path === path && handler.method === method)
+        )[0];
+    }
+
     public getRequestMiddlewares(): ExpressBootRequestMiddleware[] {
         return Object.keys(ExpressBootContext.requestMiddlewares)
             .map(
@@ -244,6 +250,20 @@ export default class ExpressBootContext implements Context {
                 priority => ExpressBootContext.requestMiddlewares[priority]
             )
             .flat(1);
+    }
+
+    public getRequestMiddleware(path: string): ExpressBootRequestMiddleware {
+        return Object.keys(ExpressBootContext.requestMiddlewares)
+            .map(
+                str => Number.parseInt(str)
+            )
+            .map(
+                priority => ExpressBootContext.requestMiddlewares[priority]
+            )
+            .flat(1)
+            .filter(
+                middleware => (middleware.path === path)
+            )[0];
     }
 
     public getCorsConfigurer(): ExpressBootRequestHandlerProvider {
