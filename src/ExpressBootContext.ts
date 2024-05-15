@@ -19,6 +19,11 @@ export default class ExpressBootContext implements Context {
     private static scripts: { [ priority: number ]: ExpressBootScript[] } = {};
 
     // Decorators:
+    /**
+     * Mark a class as node class.
+     * @param name Node name
+     * @param args Class constructor arguments
+     */
     public static node(name?: string, ...args: any[]): ClassDecorator {
         const evaluation: ClassDecorator = function (target: any) {
             if (!name) {
@@ -33,6 +38,11 @@ export default class ExpressBootContext implements Context {
         return evaluation;
     }
 
+    /**
+     * Mark a method as a node generator method.
+     * @param name Node name
+     * @param dependencies Node names
+     */
     public static configNode(name?: string, ...dependencies: (string | symbol)[]): MethodDecorator {
         const evaluation: MethodDecorator = function (target, propertyKey, descriptor: any) {
             ExpressBootContext.nodes[name || propertyKey] = descriptor.value.call(target, ...dependencies);
@@ -40,6 +50,10 @@ export default class ExpressBootContext implements Context {
         return evaluation;
     }
 
+    /**
+     * Inject a specific node matchs given name through marked method.
+     * @param name Target node name
+     */
     public static inject(name?: string): MethodDecorator {
         const evaluation: MethodDecorator = function (target, propertyKey, descriptor) {
             return <any> {
@@ -52,6 +66,12 @@ export default class ExpressBootContext implements Context {
         return evaluation;
     }
 
+    /**
+     * Mark a method as a request handler.
+     * @param path Request mapping path
+     * @param method HTTP method (undefined as middleware)
+     * @param priority Execution priority (works for middlewares execution)
+     */
     public static requestHandle(path: string, method?: ExpressBootHTTPMethod, priority = -1): MethodDecorator {
         const evaluation: MethodDecorator = function (target, propertyKey, descriptor: any) {
             const handler: RequestHandler = function (request, response, next) {
@@ -76,50 +96,95 @@ export default class ExpressBootContext implements Context {
         return evaluation;
     }
 
+    /**
+     * Mark a method as a GET request handler.
+     * @param path Request mapping path
+     */
     public static get(path: string): MethodDecorator {
         return ExpressBootContext.requestHandle(path, 'GET');
     }
 
+    /**
+     * Mark a method as a POST request handler.
+     * @param path Request mapping path
+     */
     public static post(path: string): MethodDecorator {
         return ExpressBootContext.requestHandle(path, 'POST');
     }
 
+    /**
+     * Mark a method as a PUT request handler.
+     * @param path Request mapping path
+     */
     public static put(path: string): MethodDecorator {
         return ExpressBootContext.requestHandle(path, 'PUT');
     }
 
+    /**
+     * Mark a method as a DELETE request handler.
+     * @param path Request mapping path
+     */
     public static delete(path: string): MethodDecorator {
         return ExpressBootContext.requestHandle(path, 'DELETE');
     }
 
+    /**
+     * Mark a method as a PATCH request handler.
+     * @param path Request mapping path
+     */
     public static patch(path: string): MethodDecorator {
         return ExpressBootContext.requestHandle(path, 'PATCH');
     }
 
+    /**
+     * Mark a method as a OPTIONS request handler.
+     * @param path Request mapping path
+     */
     public static options(path: string): MethodDecorator {
         return ExpressBootContext.requestHandle(path, 'OPTIONS');
     }
 
+    /**
+     * Mark a method as a HEAD request handler.
+     * @param path Request mapping path
+     */
     public static head(path: string): MethodDecorator {
         return ExpressBootContext.requestHandle(path, 'HEAD');
     }
 
+    /**
+     * Mark a method as a request middleware.
+     * @param path Request mapping path
+     * @param priority Execution priority
+     */
     public static middleware(path: string, priority?: number) {
         return ExpressBootContext.requestHandle(path, undefined, priority);
     }
 
+    /**
+     * Mark a method as a CORS configurer.
+     */
     public static cors<T extends ExpressBootRequestHandlerProvider>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) {
         ExpressBootContext.corsConfigurer = function () {
             return descriptor.value.call(target);
         };
     }
 
+    /**
+     * Mark a method as a Multer configurer.
+     */
     public static multer<T extends ExpressBootRequestHandlerProvider>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) {
         ExpressBootContext.multerConfigurer = function () {
             return descriptor.value.call(target);
         };
     }
 
+    /**
+     * Mark a method as a script.
+     * @param priority Execution priority
+     * @param dependencies Node names
+     * @returns 
+     */
     public static script<T extends ExpressBootScript>(priority: number = -1, ...dependencies: (string | symbol)[]) {
         function evaluation(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) {
             if (!ExpressBootContext.scripts[priority]) {
