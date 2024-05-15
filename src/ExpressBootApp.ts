@@ -177,7 +177,7 @@ export default class ExpressBootApp implements App {
             };
         }
         catch (error: any) {
-            if (await this.started()) {
+            if (this.started()) {
                 await this.stop();
             }
             throw error;
