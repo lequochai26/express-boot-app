@@ -1,8 +1,8 @@
 import { RequestHandler } from "express";
-import ExpressBootHTTPMethod from "./ExpressBootHTTPMethod";
+import ExpressBootHTTPMethod from "./types/ExpressBootHTTPMethod";
 import fs from 'fs';
-import ExpressBootCorsHandler from "./ExpressBootCorsHandler";
-import ExpressBootRequestHandlerProvider from "./ExpressBootRequestHandlerProvider";
+import ExpressBootCorsHandler from "./types/ExpressBootCorsHandler";
+import ExpressBootRequestHandlerProvider from "./types/ExpressBootRequestHandlerProvider";
 
 /**
  * ExpressBoot app's context and node container support for dependency injection.
