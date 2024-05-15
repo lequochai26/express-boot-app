@@ -1,4 +1,4 @@
 export default interface ExpressBootNode {
-    name: string;
+    name: string | symbol;
     value: any;
 }
