@@ -212,6 +212,14 @@ export default class ExpressBootContext implements Context {
             .flat(1);
     }
 
+    public registerNode(node: any, name: string): void {
+        if (!node) {
+            throw new Error(`Target can't be undefined!`);
+        }
+
+        ExpressBootContext.nodes[name] = node;
+    }
+
     public async load(path: string): Promise<void> {
         const filePaths: string[] = fs.readdirSync(
             path, { encoding: null, recursive: true }

@@ -19,6 +19,13 @@ export default interface Context {
     getNodes(): ExpressBootNode[];
 
     /**
+     * Register an object as a node
+     * @param node Target
+     * @param name Node name
+     */
+    registerNode(node: any, name: string): void;
+
+    /**
      * Get all request handlers in system
      * @returns All request handlers in system
      */
