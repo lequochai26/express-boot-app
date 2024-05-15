@@ -12,4 +12,5 @@ export default interface Context {
     getCorsConfigurer(): ExpressBootRequestHandlerProvider;
     getMulterConfigurer(): ExpressBootRequestHandlerProvider;
     getScripts(): ExpressBootScript[];
+    load(path: string): Promise<void>;
 }
