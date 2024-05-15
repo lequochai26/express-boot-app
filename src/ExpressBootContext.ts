@@ -7,6 +7,8 @@ import ExpressBootHTTPMethod from "./types/ExpressBootHTTPMethod";
 import ExpressBootRequestHandlerProvider from "./types/ExpressBootRequestHandlerProvider";
 import ExpressBootScript from "./types/ExpressBootScript";
 import fs from 'fs';
+import { ParamsDictionary } from "express-serve-static-core";
+import { ParsedQs } from "qs";
 
 @ExpressBootContext.node("context")
 export default class ExpressBootContext implements Context {
@@ -17,6 +19,7 @@ export default class ExpressBootContext implements Context {
     private static corsConfigurer: ExpressBootRequestHandlerProvider;
     private static multerConfigurer: ExpressBootRequestHandlerProvider;
     private static scripts: { [ priority: number ]: ExpressBootScript[] } = {};
+    private static loggerHandler: RequestHandler;
 
     // Decorators:
     /**
@@ -199,6 +202,15 @@ export default class ExpressBootContext implements Context {
         return evaluation;
     }
 
+    /**
+     * Mark a method as a logger
+     */
+    public static logger<T extends RequestHandler>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) {
+        ExpressBootContext.loggerHandler = function (request, response, next) {
+            return descriptor.value.call(target, request, response, next);
+        };
+    }
+
     // Constructors:
     public constructor() {
 
@@ -303,6 +315,10 @@ export default class ExpressBootContext implements Context {
         }
 
         ExpressBootContext.nodes[name] = node;
+    }
+
+    public getLoggerHandler(): RequestHandler {
+        return ExpressBootContext.loggerHandler;
     }
 
     public async load(path: string): Promise<void> {

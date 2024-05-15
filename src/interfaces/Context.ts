@@ -1,3 +1,4 @@
+import { RequestHandler } from "express";
 import ExpressBootHTTPMethod from "../types/ExpressBootHTTPMethod";
 import ExpressBootRequestHandlerProvider from "../types/ExpressBootRequestHandlerProvider";
 import ExpressBootScript from "../types/ExpressBootScript";
@@ -68,6 +69,12 @@ export default interface Context {
      * @returns All scripts in system
      */
     getScripts(): ExpressBootScript[];
+
+    /**
+     * Get logger reequest handler provider
+     * @returns Logger request handler provider
+     */
+    getLoggerHandler(): RequestHandler;
 
     /**
      * Load context

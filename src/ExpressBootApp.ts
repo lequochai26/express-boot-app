@@ -1,11 +1,12 @@
 import { config } from "dotenv";
 import ExpressBootContext from "./ExpressBootContext";
-import express, { Express } from 'express';
+import express, { Express, RequestHandler } from 'express';
 import http from 'http';
 import multer from "multer";
 import cors from 'cors';
 import Context from "./interfaces/Context";
 import { App } from "./interfaces/App";
+import defaultLogger from "./defaultLogger";
 
 // App config
 config();
@@ -46,6 +47,10 @@ export default class ExpressBootApp implements App {
     }
 
     private async appConfigure(app: Express, context: Context): Promise<void> {
+        // Logger
+        const logger: RequestHandler = context.getLoggerHandler() || defaultLogger;
+        app.use(logger);
+
         // CORS
         const corsConfigurer = context.getCorsConfigurer();
         app.use(
