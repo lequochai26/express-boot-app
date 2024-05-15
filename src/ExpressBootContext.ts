@@ -335,7 +335,7 @@ export default class ExpressBootContext implements Context {
                 continue;
             }
 
-            await import(`${path}/${filePath}`);
+            await import(`${path}${!path.endsWith("/") ? "/": ""}${filePath}`);
         }
     }
 }
