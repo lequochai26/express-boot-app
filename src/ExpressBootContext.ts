@@ -217,6 +217,14 @@ export default class ExpressBootContext implements Context {
         );
 
         for (const filePath of filePaths) {
+            if (
+                !filePath.endsWith(".ts")
+                &&
+                !filePath.endsWith(".js")
+            ) {
+                continue;
+            }
+
             await import(filePath);
         }
     }
