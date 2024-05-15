@@ -8,6 +8,7 @@ import ExpressBootRequestHandlerProvider from "./types/ExpressBootRequestHandler
 import ExpressBootScript from "./types/ExpressBootScript";
 import fs from 'fs';
 
+@ExpressBootContext.node("context")
 export default class ExpressBootContext implements Context {
     // Static fields:
     private static nodes: { [ index: string | symbol ]: any } = {};
