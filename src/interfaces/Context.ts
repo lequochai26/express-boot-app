@@ -1,3 +1,4 @@
+import ExpressBootHTTPMethod from "../types/ExpressBootHTTPMethod";
 import ExpressBootRequestHandlerProvider from "../types/ExpressBootRequestHandlerProvider";
 import ExpressBootScript from "../types/ExpressBootScript";
 import ExpressBootNode from "./ExpressBootNode";
@@ -32,10 +33,23 @@ export default interface Context {
     getRequestHandlers(): ExpressBootRequestHandler[];
 
     /**
+     * Get request handler match given path and method in system.
+     * @param path Request mapping path
+     * @param method HTTP method
+     */
+    getRequestHandler(path: string, method: ExpressBootHTTPMethod): ExpressBootRequestHandler;
+
+    /**
      * Get all request middlewares is system
      * @returns All request middlewares in system
      */
     getRequestMiddlewares(): ExpressBootRequestMiddleware[];
+
+    /**
+     * Get request middleware match given path in system.
+     * @param path Request mapping path
+     */
+    getRequestMiddleware(path: string): ExpressBootRequestMiddleware;
 
     /**
      * Get CORS configurer
