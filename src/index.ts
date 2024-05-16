@@ -10,5 +10,13 @@ import ExpressBootScript from './types/ExpressBootScript';
 import ExpressBootApp from "./ExpressBootApp";
 import ExpressBootContext from "./ExpressBootContext";
 import ExpressBootRequestDispatcher from "./ExpressBootRequestDispatcher";
+import HashAlgorithm from "./enums/HashAlgorithm";
+import IdGenerateStrategy from "./enums/IdGenerateStrategy";
+import Hasher from "./interfaces/Hasher";
+import IdGenerator from "./interfaces/IdGenerator";
+import SessionFactory from "./interfaces/SessionFactory";
+import ExpressBootHasher from "./ExpressBootHasher";
+import ExpressBootIdGenerator from "./ExpressBootIdGenerator";
+import ExpressBootSessionFactory from "./ExpressBootSessionFactory";
 
-export { App, Context, ExpressBootNode, ExpressBootRequestHandler, ExpressBootRequestMiddleware, RequestDispatcher, ExpressBootHTTPMethod, ExpressBootRequestHandlerProvider, ExpressBootScript, ExpressBootApp, ExpressBootContext, ExpressBootRequestDispatcher };
+export { App, Context, ExpressBootNode, ExpressBootRequestHandler, ExpressBootRequestMiddleware, RequestDispatcher, ExpressBootHTTPMethod, ExpressBootRequestHandlerProvider, ExpressBootScript, ExpressBootApp, ExpressBootContext, ExpressBootRequestDispatcher, HashAlgorithm, IdGenerateStrategy, Hasher, IdGenerator, SessionFactory, ExpressBootHasher, ExpressBootIdGenerator, ExpressBootSessionFactory };
