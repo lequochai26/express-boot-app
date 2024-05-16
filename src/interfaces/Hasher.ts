@@ -1,3 +1,5 @@
+import HashAlgorithm from "../enums/HashAlgorithm";
+
 /**
  * Text hasher
  */
