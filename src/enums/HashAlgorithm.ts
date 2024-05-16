@@ -4,3 +4,4 @@
 enum HashAlgorithm {
     SHA256
 }
+export default HashAlgorithm;
