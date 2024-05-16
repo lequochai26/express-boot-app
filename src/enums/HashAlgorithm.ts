@@ -1,0 +1,3 @@
+enum HashAlgorithm {
+    SHA256
+}
