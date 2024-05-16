@@ -1,5 +1,8 @@
 import { Request, Response } from "express";
 
+/**
+ * Represent a session factory in ExpressBoot system
+ */
 export default interface SessionFactory {
     /**
      * Create new session
