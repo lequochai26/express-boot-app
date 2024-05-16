@@ -6,6 +6,9 @@ import ExpressBootNode from "./ExpressBootNode";
 import ExpressBootRequestHandler from "./ExpressBootRequestHandler";
 import ExpressBootRequestMiddleware from "./ExpressBootRequestMiddleware";
 
+/**
+ * Represent the context of your ExpressBoot app
+ */
 export default interface Context {
     /**
      * Get a specific node in 
