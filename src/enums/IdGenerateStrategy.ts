@@ -1,3 +1,6 @@
+/**
+ * ID auto generation strategy
+ */
 enum IdGenerateStrategy {
     TIME
 }
