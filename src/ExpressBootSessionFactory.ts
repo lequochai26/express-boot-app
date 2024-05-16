@@ -53,7 +53,7 @@ export default class ExpressBootSessionFactory implements SessionFactory {
     }
 
     public retrieve(request: Request, response: Response): any {
-        let { sessionId } = request.cookies;
+        const sessionId: string = request.cookies[cookieKey];
         const session = this.get(sessionId);
 
         if (!session) {
