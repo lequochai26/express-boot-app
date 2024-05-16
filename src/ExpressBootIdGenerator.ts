@@ -1,3 +1,4 @@
+import HashAlgorithm from "./enums/HashAlgorithm";
 import IdGenerateStrategy from "./enums/IdGenerateStrategy";
 import ExpressBootContext from "./ExpressBootContext";
 import Hasher from "./interfaces/Hasher";

@@ -1,3 +1,4 @@
+import HashAlgorithm from "./enums/HashAlgorithm";
 import ExpressBootContext from "./ExpressBootContext";
 import Hasher from "./interfaces/Hasher";
 import crypto from 'crypto';
