@@ -7,6 +7,7 @@ import cors from 'cors';
 import Context from "./interfaces/Context";
 import { App } from "./interfaces/App";
 import defaultLogger from "./defaultLogger";
+import cookieParser from "cookie-parser";
 
 // App config
 config();
@@ -56,6 +57,9 @@ export default class ExpressBootApp implements App {
         app.use(
             corsConfigurer ? corsConfigurer() : cors()
         );
+
+        // Cookie parser
+        app.use(cookieParser());
 
         // JSON body parser
         app.use(express.json());
