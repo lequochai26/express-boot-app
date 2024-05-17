@@ -242,18 +242,20 @@ export default class ExpressBootContext implements Context {
     }
 
     public getRequestMiddlewares(): ExpressBootRequestMiddleware[] {
-        return Object.keys(ExpressBootContext.requestMiddlewares)
+        return <any> Object.keys(ExpressBootContext.requestMiddlewares)
             .map(
                 priority => Number.parseInt(priority)
             )
             .map(
-                (priority, index, array) => (
-                    priority >= 0
-                    ?
-                    priority
-                    :
-                    array.length
-                )
+                (priority, index, array) => {
+                    if (priority >= 0) {
+                        return priority;
+                    }
+
+                    ExpressBootContext.requestMiddlewares[array.length] = ExpressBootContext.requestMiddlewares[priority];
+                    delete ExpressBootContext.requestMiddlewares[priority];
+                    return array.length;
+                }
             )
             .sort(
                 (a, b) => a - b
@@ -292,13 +294,15 @@ export default class ExpressBootContext implements Context {
                 str => Number.parseInt(str)
             )
             .map(
-                (priority, index, array) => (
-                    priority >= 0
-                    ?
-                    priority
-                    :
-                    array.length
-                )
+                (priority, index, array) => {
+                    if (priority >= 0) {
+                        return priority
+                    }
+
+                    ExpressBootContext.scripts[array.length] = ExpressBootContext.scripts[priority];
+                    delete ExpressBootContext.scripts[priority];
+                    return array.length
+                }
             )
             .sort(
                 (a, b) => a - b
