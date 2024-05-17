@@ -95,7 +95,7 @@ export default class ExpressBootApp implements App {
 
         for (const { path, middleware } of context.getRequestMiddlewares()) {
             app.use(path, middleware);
-            this.logger().info(`App loaded request middleware for path: ${path}`);
+            this.logger().info(`${appName} loaded request middleware for path: ${path}`);
         }
 
         this.logger().info(`${appName}'s request middlewares loaded successfully!`);
