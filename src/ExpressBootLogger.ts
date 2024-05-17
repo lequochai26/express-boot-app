@@ -1,4 +1,4 @@
-import { bgCyan, bgRed, bgYellow } from "colors";
+import { cyan, red, yellow } from "colors";
 import ExpressBootContext from "./ExpressBootContext";
 import Logger from "./interfaces/Logger";
 import { NextFunction, Request, Response } from "express";
@@ -14,18 +14,16 @@ export default class ExpressBootLogger implements Logger {
     private log(content: string, type: "INFO" | "WARNING" | "ERROR"): void {
         content = `<${new Date().toLocaleTimeString("vi")}>  [${type.charAt(0)}]  ${content}`;
 
-        content = content.padEnd(process.stdout.columns);
-
         content = (
             type === 'INFO'
             ?
-            bgCyan(content)
+            cyan(content)
             :
             type === 'WARNING'
             ?
-            bgYellow(content)
+            yellow(content)
             :
-            bgRed(content)
+            red(content)
         );
 
         console.log(content);
