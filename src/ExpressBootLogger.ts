@@ -1,6 +1,7 @@
 import { bgCyan, bgRed, bgYellow } from "colors";
 import ExpressBootContext from "./ExpressBootContext";
 import Logger from "./interfaces/Logger";
+import { NextFunction, Request, Response } from "express";
 
 @ExpressBootContext.node("logger")
 export default class ExpressBootLogger implements Logger {
@@ -39,5 +40,11 @@ export default class ExpressBootLogger implements Logger {
 
     public error(content: string): void {
         this.log(content, "ERROR");
+    }
+
+    @ExpressBootContext.requestLogger
+    public requestLog(request: Request, respone: Response, next: NextFunction) {
+        this.info(`${request.method}: ${request.path}`);
+        next();
     }
 }
