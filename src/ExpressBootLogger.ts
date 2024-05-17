@@ -12,7 +12,9 @@ export default class ExpressBootLogger implements Logger {
 
     // Private methods:
     private log(content: string, type: "INFO" | "WARNING" | "ERROR"): void {
-        content = `${new Date().toLocaleTimeString("vi").padEnd(10)}${type.charAt(0).padEnd(3)}${content}`
+        content = `<${new Date().toLocaleTimeString("vi")}>  [${type.charAt(0)}]  ${content}`;
+
+        content = content.padEnd(process.stdout.columns);
 
         content = (
             type === 'INFO'
