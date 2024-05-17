@@ -1,5 +1,5 @@
 {
-  "name": "express-boot",
+  "name": "express-boot-app",
   "version": "1.0.0",
   "description": "Back-end framework build on top of Express.js",
   "main": "./dist/index.js",
@@ -9,7 +9,7 @@
     "build": "tsc"
   },
   "keywords": [
-    "express-boot"
+    "express-boot-app"
   ],
   "author": "Le Quoc Hai",
   "license": "ISC",
