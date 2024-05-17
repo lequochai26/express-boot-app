@@ -7,6 +7,7 @@ import cors from 'cors';
 import Context from "./interfaces/Context";
 import { App } from "./interfaces/App";
 import cookieParser from "cookie-parser";
+import Logger from "./interfaces/Logger";
 
 // App config
 config();
@@ -33,20 +34,32 @@ export default class ExpressBootApp implements App {
         return null;
     }
 
+    @ExpressBootContext.inject()
+    private logger(): Logger {
+        return null;
+    }
+
     // Private methods:
     private async loadContext(context: Context, sourceRoot: string): Promise<void> {
         await context.load(sourceRoot);
     }
 
     private async executeScripts(context: Context): Promise<void> {
+        this.logger().info(`${appName}'s scripts executing...`);
+
         // Get all scripts in system
         const scripts = context.getScripts();
         for (const script of scripts) {
             script();
         }
+
+        this.logger().info(`${appName}'s scripts executed successfully!`);
     }
 
     private async appConfigure(app: Express, context: Context): Promise<void> {
+        // Start log
+        this.logger().info(`${appName} configuring...`);
+
         // Logger
         const logger: RequestHandler = context.getRequestLogger()
         app.use(logger);
@@ -72,15 +85,25 @@ export default class ExpressBootApp implements App {
             :
             multer({ storage: multer.memoryStorage() }).any()
         );
+
+        // Success log
+        this.logger().info(`${appName} configured successfully!`);
     }
 
     private async applyRequestMiddlewares(app: Express, context: Context): Promise<void> {
+        this.logger().info(`${appName}'s request middlewares loading...`);
+
         for (const { path, middleware } of context.getRequestMiddlewares()) {
             app.use(path, middleware);
+            this.logger().info(`App loaded request middleware for path: ${path}`);
         }
+
+        this.logger().info(`${appName}'s request middlewares loaded successfully!`);
     }
 
     private async applyRequestHandlers(app: Express, context: Context): Promise<void> {
+        this.logger().info(`${appName}'s request handlers loading...`);
+
         for (const { path, method, handler } of context.getRequestHandlers()) {
             switch (method) {
                 case 'DELETE': {
@@ -117,11 +140,16 @@ export default class ExpressBootApp implements App {
                     app.put(path, handler);
                 }
             }
+
+            this.logger().info(`${appName} loaded request handler for path: ${path}, and method: ${method}`);
         }
+
+        this.logger().info(`${appName}'s request handlers loaded successfully!`)
     }
 
     private async staticResourcesServe(app: Express, staticResourcesPath: string): Promise<void> {
         app.use(express.static(staticResourcesPath));
+        this.logger().info(`${appName}'s static resources serve on ${staticResourcesPath} folder!`);
     }
 
     // Methods:
@@ -137,6 +165,9 @@ export default class ExpressBootApp implements App {
     }
 
     public async start(): Promise<{ app: Express, server: http.Server }> {
+        // Start logging
+        this.logger().info(`${appName} starting...`);
+
         // Source root undefined case
         if (!sourceRoot) {
             throw new Error("Please, specify SOURCE_ROOT before performing this action!");
@@ -163,7 +194,7 @@ export default class ExpressBootApp implements App {
             this.expressApp = express();
             this.server = this.expressApp.listen(
                 port,
-                () => console.log(`${appName} started on port ${port}`)
+                () => this.logger().info(`${appName} listening on port ${port}`)
             );
 
             // Congiure app
@@ -177,6 +208,9 @@ export default class ExpressBootApp implements App {
 
             // Serving static resources
             await this.staticResourcesServe(this.expressApp, staticResourcesPath);
+
+            // Finishing log
+            this.logger().info(`${appName} started successfully on port ${port}!`);
 
             // Return app and server
             return {

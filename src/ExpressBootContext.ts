@@ -7,6 +7,7 @@ import ExpressBootHTTPMethod from "./types/ExpressBootHTTPMethod";
 import ExpressBootRequestHandlerProvider from "./types/ExpressBootRequestHandlerProvider";
 import ExpressBootScript from "./types/ExpressBootScript";
 import fs from 'fs';
+import Logger from "./interfaces/Logger";
 
 @ExpressBootContext.node("context")
 export default class ExpressBootContext implements Context {
@@ -18,6 +19,10 @@ export default class ExpressBootContext implements Context {
     private static multerConfigurer: ExpressBootRequestHandlerProvider;
     private static scripts: { [ priority: number ]: ExpressBootScript[] } = {};
     private static requestLoggerHandler: RequestHandler;
+
+    // Static dependencies:
+    @ExpressBootContext.inject()
+    private static logger(): Logger { return null; }
 
     // Decorators:
     /**
@@ -35,6 +40,11 @@ export default class ExpressBootContext implements Context {
                 );
             }
             ExpressBootContext.nodes[name] = new target(...args);
+
+            ExpressBootContext.logger()
+                ?.info(
+                    `Instantiated node '${name}' of class '${target.name}'`
+                );
         };
         return evaluation;
     }
@@ -47,6 +57,11 @@ export default class ExpressBootContext implements Context {
     public static configNode(name?: string, ...dependencies: (string | symbol)[]): MethodDecorator {
         const evaluation: MethodDecorator = function (target, propertyKey, descriptor: any) {
             ExpressBootContext.nodes[name || propertyKey] = descriptor.value.call(target, ...dependencies);
+
+            ExpressBootContext.logger()
+                ?.info(
+                    `Received node '${String(name || propertyKey)}' from method '${String(propertyKey)}'`
+                );
         };
         return evaluation;
     }
@@ -57,6 +72,11 @@ export default class ExpressBootContext implements Context {
      */
     public static inject(name?: string): MethodDecorator {
         const evaluation: MethodDecorator = function (target, propertyKey, descriptor) {
+            ExpressBootContext.logger()
+                ?.info(
+                    `Injected node '${String(name || propertyKey)}' into method '${String(propertyKey)}'`
+                );
+
             return <any> {
                 ...descriptor,
                 value: function () {
@@ -93,6 +113,11 @@ export default class ExpressBootContext implements Context {
                     path, method, handler
                 });
             }
+
+            ExpressBootContext.logger()
+                ?.info(
+                    `Detected a ${method ? "request handler" : "middleware"} from method '${String(propertyKey)}'`
+                );
         };
         return evaluation;
     }
@@ -167,6 +192,8 @@ export default class ExpressBootContext implements Context {
      */
     public static cors<T extends ExpressBootRequestHandlerProvider>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) {
         ExpressBootContext.corsConfigurer = function () {
+            ExpressBootContext.logger()
+                ?.info(`Detected CORS configurer from  method '${String(propertyKey)}'`);
             return descriptor.value.call(target);
         };
     }
@@ -176,6 +203,8 @@ export default class ExpressBootContext implements Context {
      */
     public static multer<T extends ExpressBootRequestHandlerProvider>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) {
         ExpressBootContext.multerConfigurer = function () {
+            ExpressBootContext.logger()
+                ?.info(`Detected multer configurer from method '${String(propertyKey)}'`);
             return descriptor.value.call(target);
         };
     }
@@ -195,7 +224,9 @@ export default class ExpressBootContext implements Context {
                 function () {
                     descriptor.value.call(target, ...dependencies.map(dependency => ExpressBootContext.nodes[dependency]));
                 }
-            )
+            );
+            ExpressBootContext.logger()
+                ?.info(`Detected a script from method '${String(propertyKey)}'`);
         };
         return evaluation;
     }
@@ -324,6 +355,9 @@ export default class ExpressBootContext implements Context {
     }
 
     public async load(path: string): Promise<void> {
+        ExpressBootContext.logger()
+            .info(`Context loading...`);
+
         const filePaths: string[] = fs.readdirSync(
             path, { encoding: null, recursive: true }
         );
@@ -338,6 +372,11 @@ export default class ExpressBootContext implements Context {
             }
 
             await import(`${path}${!path.endsWith("/") ? "/": ""}${filePath}`);
+            ExpressBootContext.logger()
+                .info(`Context loading ${filePath}`);
         }
+
+        ExpressBootContext.logger()
+            .info(`Context loaded successfully!`);
     }
 }
