@@ -18,5 +18,7 @@ import SessionFactory from "./interfaces/SessionFactory";
 import ExpressBootHasher from "./ExpressBootHasher";
 import ExpressBootIdGenerator from "./ExpressBootIdGenerator";
 import ExpressBootSessionFactory from "./ExpressBootSessionFactory";
+import Logger from "./interfaces/Logger";
+import ExpressBootLogger from "./ExpressBootLogger";
 
-export { App, Context, ExpressBootNode, ExpressBootRequestHandler, ExpressBootRequestMiddleware, RequestDispatcher, ExpressBootHTTPMethod, ExpressBootRequestHandlerProvider, ExpressBootScript, ExpressBootApp, ExpressBootContext, ExpressBootRequestDispatcher, HashAlgorithm, IdGenerateStrategy, Hasher, IdGenerator, SessionFactory, ExpressBootHasher, ExpressBootIdGenerator, ExpressBootSessionFactory };
+export { App, Context, ExpressBootNode, ExpressBootRequestHandler, ExpressBootRequestMiddleware, RequestDispatcher, ExpressBootHTTPMethod, ExpressBootRequestHandlerProvider, ExpressBootScript, ExpressBootApp, ExpressBootContext, ExpressBootRequestDispatcher, HashAlgorithm, IdGenerateStrategy, Hasher, IdGenerator, SessionFactory, ExpressBootHasher, ExpressBootIdGenerator, ExpressBootSessionFactory, Logger, ExpressBootLogger };
