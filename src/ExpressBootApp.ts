@@ -108,32 +108,32 @@ export default class ExpressBootApp implements App {
             switch (method) {
                 case 'DELETE': {
                     app.delete(path, handler);
-                    continue;
+                    break;
                 }
 
                 case 'GET': {
                     app.get(path, handler);
-                    continue;
+                    break;
                 }
 
                 case 'HEAD': {
                     app.head(path, handler);
-                    continue;
+                    break;
                 }
 
                 case 'OPTIONS': {
                     app.options(path, handler);
-                    continue;
+                    break;
                 }
 
                 case 'PATCH': {
                     app.patch(path, handler);
-                    continue;
+                    break;
                 }
 
                 case 'POST': {
                     app.post(path, handler);
-                    continue;
+                    break;
                 }
 
                 case 'PUT': {
