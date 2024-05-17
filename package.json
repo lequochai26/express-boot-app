@@ -1,5 +1,5 @@
 {
-  "name": "express-boot-app",
+  "name": "express-boot-framework",
   "version": "1.0.0",
   "description": "Back-end framework build on top of Express.js",
   "main": "./dist/index.js",
@@ -9,7 +9,21 @@
     "build": "tsc"
   },
   "keywords": [
-    "express-boot-app"
+    "express-boot-framework",
+    "ExpressBoot",
+    "Express Boot Framework",
+    "ExpressBoot App",
+    "Express Boot App",
+    "Back-end",
+    "Dependency injection",
+    "DI",
+    "Decorator",
+    "Express",
+    "Express.js",
+    "Typescript",
+    "Decorator-based",
+    "Method",
+    "Method-based"
   ],
   "author": "Le Quoc Hai",
   "license": "ISC",
