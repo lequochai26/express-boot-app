@@ -74,10 +74,10 @@ export default interface Context {
     getScripts(): ExpressBootScript[];
 
     /**
-     * Get logger reequest handler provider
-     * @returns Logger request handler provider
+     * Get request logger request handler provider
+     * @returns Request logger handler provider
      */
-    getLoggerHandler(): RequestHandler;
+    getRequestLogger(): RequestHandler;
 
     /**
      * Load context

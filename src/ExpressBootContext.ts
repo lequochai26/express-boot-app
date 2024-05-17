@@ -17,7 +17,7 @@ export default class ExpressBootContext implements Context {
     private static corsConfigurer: ExpressBootRequestHandlerProvider;
     private static multerConfigurer: ExpressBootRequestHandlerProvider;
     private static scripts: { [ priority: number ]: ExpressBootScript[] } = {};
-    private static loggerHandler: RequestHandler;
+    private static requestLoggerHandler: RequestHandler;
 
     // Decorators:
     /**
@@ -201,10 +201,10 @@ export default class ExpressBootContext implements Context {
     }
 
     /**
-     * Mark a method as a logger
+     * Mark a method as a request logger
      */
-    public static logger<T extends RequestHandler>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) {
-        ExpressBootContext.loggerHandler = function (request, response, next) {
+    public static requestLogger<T extends RequestHandler>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) {
+        ExpressBootContext.requestLoggerHandler = function (request, response, next) {
             return descriptor.value.call(target, request, response, next);
         };
     }
@@ -319,8 +319,8 @@ export default class ExpressBootContext implements Context {
         ExpressBootContext.nodes[name] = node;
     }
 
-    public getLoggerHandler(): RequestHandler {
-        return ExpressBootContext.loggerHandler;
+    public getRequestLogger(): RequestHandler {
+        return ExpressBootContext.requestLoggerHandler;
     }
 
     public async load(path: string): Promise<void> {

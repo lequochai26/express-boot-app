@@ -49,7 +49,7 @@ export default class ExpressBootApp implements App {
 
     private async appConfigure(app: Express, context: Context): Promise<void> {
         // Logger
-        const logger: RequestHandler = context.getLoggerHandler() || defaultLogger;
+        const logger: RequestHandler = context.getRequestLogger() || defaultLogger;
         app.use(logger);
 
         // CORS
