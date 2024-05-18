@@ -13,6 +13,34 @@ const staticResourcesPath: string = process.env.STATIC_RESOURCES_PATH || "./asse
  */
 @ExpressBootContext.node("fileHandler")
 export default class ExpressBootFileHandler implements FileHandler {
+    // Static methods:
+    public static readonly fileTypeFilters = {
+        image: function (file: Express.Multer.File): boolean {
+            return file.mimetype.startsWith("image/");
+        },
+        video: function (file: Express.Multer.File): boolean {
+            return file.mimetype.startsWith("video/")
+        },
+        text: function (file: Express.Multer.File): boolean {
+            return file.mimetype.startsWith("text/");
+        },
+        audio: function (file: Express.Multer.File): boolean {
+            return file.mimetype.startsWith("audio/");
+        },
+        application: function (file: Express.Multer.File): boolean {
+            return file.mimetype.startsWith("application/");
+        },
+        font: function (file: Express.Multer.File): boolean {
+            return file.mimetype.startsWith("font/");
+        },
+        model: function (file: Express.Multer.File): boolean {
+            return file.mimetype.startsWith("model/");
+        },
+        chemical: function (file: Express.Multer.File): boolean {
+            return file.mimetype.startsWith("chemical/");
+        },
+    }
+
     // Constructors:
     public constructor() {
 
