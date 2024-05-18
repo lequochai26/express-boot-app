@@ -110,6 +110,11 @@ export default class ExpressBootFileHandler implements FileHandler {
         // Get file save path
         const savePath: string = `${path}${!path.endsWith("/") ? "/" : ""}${fileName}`;
 
+        // Make sure directory exists before saving
+        if (!fs.existsSync(path)) {
+            fs.mkdirSync(path);
+        }
+
         // Saving
         fs.writeFileSync(savePath, file.buffer);
 
