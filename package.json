@@ -1,9 +1,12 @@
 {
   "name": "express-boot-framework",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Back-end framework build on top of Express.js",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "repository": {
+    "url": "https://github.com/lequochai26/express-boot-framework"
+  },
   "scripts": {
     "start": "ts-node ./src/index.ts",
     "build": "tsc"
